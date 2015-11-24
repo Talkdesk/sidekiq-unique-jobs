@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'timecop'
   gem.add_development_dependency 'yard'
+  gem.add_development_dependency 'redis-namespace'
 end

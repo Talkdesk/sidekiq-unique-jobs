@@ -14,6 +14,7 @@ module SidekiqUniqueJobs
         @redis_pool = redis_pool
         @queue = queue
         @item = item
+        before_work_hook(item)
         return yield unless unique_enabled?
         lock.send(:execute, after_unlock_hook, &blk)
       end
@@ -23,6 +24,10 @@ module SidekiqUniqueJobs
       attr_reader :redis_pool, :worker, :item, :worker_class
 
       protected
+
+      def before_work_hook(item)
+        worker.before_work(item.dup) if worker.respond_to?(:before_work)
+      end
 
       def after_unlock_hook
         -> { worker.after_unlock if worker.respond_to?(:after_unlock) }

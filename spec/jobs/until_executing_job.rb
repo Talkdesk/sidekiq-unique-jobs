@@ -5,4 +5,8 @@ class UntilExecutingJob
 
   def perform
   end
+
+  def before_work(_)
+    # NO-OP
+  end
 end

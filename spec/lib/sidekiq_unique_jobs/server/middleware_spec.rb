@@ -65,6 +65,14 @@ RSpec.describe SidekiqUniqueJobs::Server::Middleware do
           end
         end
       end
+
+      it 'calls before_work_hook hook' do
+        jid = UntilExecutingJob.perform_async
+        item = Sidekiq::Queue.new(QUEUE).find_job(jid).item
+        worker = UntilExecutingJob.new
+        expect(worker).to receive(:before_work).with(item)
+        subject.call(worker, item, QUEUE) {}
+      end
     end
 
     describe ':after_yield' do
